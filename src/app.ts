@@ -8,8 +8,9 @@ import { GitHubController } from './presentation/github/controller';
 
 function main() {
     const app = express();
-
     const controller = new GitHubController();
+
+    app.use(express.json());
 
     app.post('/api/github', controller.webhooksHandler);
 
