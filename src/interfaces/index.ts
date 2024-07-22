@@ -1,2 +1,2 @@
 export { GitHubIssuePayload } from './github-issue.interface';
-export { GitHubStartPayload } from './github-start.interface';
+export { GitHubStarPayload } from './github-star.interface';
