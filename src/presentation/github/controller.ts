@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
 import { GitHubService } from '../services/github.service';
+import { DiscordService } from '../services/discord.service';
 
 export class GitHubController {
-    constructor(private readonly githubService = new GitHubService()) {}
+    constructor(
+        private readonly githubService = new GitHubService(),
+        private readonly discordService = new DiscordService()
+    ) {}
 
     webhooksHandler = (req: Request, res: Response) => {
         const githubEvent = req.header('x-github-event') ?? 'unknown';
@@ -20,8 +24,9 @@ export class GitHubController {
                 message = `Unknown event: ${githubEvent}`;
         }
 
-        console.log(message);
-
-        res.status(202).send('Webhook received');
+        this.discordService
+            .notify(message)
+            .then(() => res.status(202).send('Webhook received'))
+            .catch(() => res.status(500).send('Failed to notify Discord'));
     };
 }
